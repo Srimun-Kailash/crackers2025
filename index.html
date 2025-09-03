@@ -228,7 +228,7 @@
 
       const finalY = doc.lastAutoTable.finalY || 30;
       doc.setFontSize(13);
-      doc.text(`Total: ₹${total.toFixed(2)}`, 14, finalY + 10);
+      doc.text(`Total: Rs. ${total.toFixed(2)}`, 14, finalY + 10);
 
       doc.save("cracker-order-summary.pdf");
     }
@@ -238,3 +238,4 @@
 
 </body>
 </html>
+
