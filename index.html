@@ -24,10 +24,10 @@
 
   table {
     width: 100%;
-	border-collapse: collapse;
-	background-color: #222;
-	margin-bottom: 20px;
-	table-layout: fixed;
+    border-collapse: collapse;
+    background-color: #222;
+    margin-bottom: 20px;
+    table-layout: fixed;
   }
 
   th, td {
@@ -69,13 +69,29 @@
     margin-bottom: 30px;
   }
   .header-banner {
-	  width: 100%;
-	  max-width: 100%;
-	  height: auto;
-	  display: block;
-	  margin: 0 auto;
-	  object-fit: cover;
-	}
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    object-fit: cover;
+  }
+  
+  .buttoncontrols {
+	text-align: center;
+	margin: 30px 0;
+   }
+
+  .buttoncontrols button {
+	padding: 12px 24px;
+	font-size: 16px;
+	background-color: #e67e22;
+	border-radius: 6px;
+   }
+
+  .buttoncontrols button:hover {
+	background-color: #d35400;
+   }
 
   @media (max-width: 768px) {
     th, td {
@@ -115,12 +131,13 @@
 </head>
 <body>
   <div style="text-align: center; margin-top: 20px;">
-	  <img src="images/cosmic-crackers-banner.png" alt="Cosmic Crackers Header" class="header-banner" />
+    <img src="images/cosmic-crackers-banner.png" alt="Cosmic Crackers Header" class="header-banner" />
   </div>
 
   <table id="itemTable">
     <thead>
       <tr>
+        <th>S.No</th>
         <th>Image</th>
         <th>Item</th>
         <th>Price</th>
@@ -134,115 +151,331 @@
   </table>
 
   <h3>Total: ₹<span id="total">0.00</span></h3>
-  <button onclick="generatePDF()">Download Order PDF</button>
-
+  <div class="buttoncontrols">
+	  <button onclick="generatePDF()">📄 Download Order PDF</button>
+  </div>
   <script>
-    const itemData = [
-      { name: "Bijili", price: 10, per: "1 Box", quantity: 0, image: "images/ground chakkar.webp" },
-      { name: "2' sky shot", price: 5, per: "1 Packet", quantity: 0, image: "images/ground chakkar.webp" },
-      { name: "Flower Pot", price: 8, per: "1 Box", quantity: 0, image: "images/ground chakkar.webp" },
-      { name: "Ground Chakkar", price: 15, per: "1 Packet", quantity: 0, image: "images/ground chakkar.webp" },
-      { name: "Rocket", price: 10, per: "1 Box", quantity: 0, image: "images/ground chakkar.webp" },
-      { name: "5' sky shot", price: 5, per: "1 Packet", quantity: 0, image: "images/ground chakkar.webp" },
-      { name: "Whistling wheel", price: 8, per: "1 Box", quantity: 0, image: "images/ground chakkar.webp" },
-      { name: "1000 wala", price: 15, per: "1 Piece", quantity: 0, image: "images/ground chakkar.webp" }
-    ];
+  const categorizedItems = {
+    "Flash Sound Crackers": [
+      { name: "3½\" Lakshmi", price: 35.00, per: "1 Packet", image: "images/ground chakkar.webp" },
+      { name: "4\" Lakshmi", price: 45.00, per: "1 Packet", image: "images/ground chakkar.webp" },
+      { name: "4\" Deluxe Lakshmi", price: 75.00, per: "1 Packet", image: "images/ground chakkar.webp" },
+      { name: "4\" Gold Lakshmi", price: 80.00, per: "1 Packet", image: "images/ground chakkar.webp" },
+      { name: "2¾\" Kuruvi Crackers", price: 25.00, per: "1 Packet", image: "images/ground chakkar.webp" },
+      { name: "Two Sound Crackers", price: 80.00, per: "1 Packet", image: "images/ground chakkar.webp" },
+      { name: "5\" Mega Deluxe", price: 90.00, per: "1 Packet", image: "images/ground chakkar.webp" },
+    ],
+    "Electric Crackers": [
+      { name: "28 Chorsa", price: 35.00, per: "1 Packet", image: "images/ground chakkar.webp" },
+      { name: "28 Giant", price: 55.00, per: "1 Packet", image: "images/ground chakkar.webp" },
+      { name: "56 Giant", price: 110.00, per: "1 Packet", image: "images/ground chakkar.webp" },
+    ],
+    "Deluxe Crackers": [
+      { name: "24 Deluxe", price: 120.00, per: "1 Packet", image: "images/ground chakkar.webp" },
+      { name: "50 Deluxe", price: 265.00, per: "1 Packet", image: "images/ground chakkar.webp" },
+      { name: "100 Deluxe", price: 530.00, per: "1 Packet", image: "images/ground chakkar.webp" },
+    ],
+    "Garlands": [
+      { name: "100 Wala", price: 85.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "200 Wala", price: 170.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "300 Wala", price: 240.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "600 Wala", price: 435.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "1000 Wala", price: 660.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "2000 Wala", price: 1320.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "5000 Wala", price: 3300.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "10000 Wala", price: 6600.00, per: "1 Box", image: "images/ground chakkar.webp" },
+    ],
+    "Atom Bombs": [
+      { name: "Bullet Bomb Deluxe", price: 60.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "Atom Bomb", price: 100.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "Hydro Bomb Green", price: 135.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "Classic Bomb", price: 220.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "King of King", price: 265.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "Jurassic Agni Bomb Deluxe", price: 480.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "Digital Bomb", price: 580.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "Adiyal Paper Bomb", price: 135.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "Mega Paper Bomb", price: 255.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "Colour Paper Bomb", price: 170.00, per: "1 Box", image: "images/ground chakkar.webp" },
+      { name: "1Kg Paper Bomb", price: 505.00, per: "1 Box", image: "images/ground chakkar.webp" },
+    ],
+	"Bijili Crackers": [
+		{ name: "Red Bijili (50 Pcs)", price: 30.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Red Bijili (100 Pcs)", price: 30.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Gold Stripped Bijili (100 Pcs)", price: 65.00, per: "1 Box", image: "images/ground chakkar.webp" },
+	  ],
 
-    function renderTable() {
-      const tbody = document.querySelector("#itemTable tbody");
-      tbody.innerHTML = "";
+	  "Ground Chakkar": [
+		{ name: "Ground Chakkar Big (10 Pcs)", price: 70.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Ground Chakkar Big (25 Pcs)", price: 170.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Ground Chakkar Special", price: 170.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Ground Chakkar Deluxe", price: 290.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Disco Wheel", price: 290.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Colour Changing Weel", price: 290.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Candil Vayar Chakkaram", price: 550.00, per: "1 Box", image: "images/ground chakkar.webp" },
+	  ],
 
-      itemData.forEach((item, index) => {
-        const discounted = item.price * 0.8;
+	  "Flower Pots": [
+		{ name: "Flower Pots Small", price: 120.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Flower Pots Big", price: 170.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Flower Pots Special", price: 240.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Flower Pots Ashoka", price: 310.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Flower Pots Deluxe (5 Pcs)", price: 360.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Flower Pots Colour Kotti", price: 480.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Ganga Jamuna", price: 170.00, per: "1 Box", image: "images/ground chakkar.webp"},
+	  ],
+
+	  "Rocket": [
+		{ name: "Baby Rocket", price: 95.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Rocket Bomb", price: 130.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Lunik Express", price: 240.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Two Sound Rocket", price: 265.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Three Sound Rocket", price: 290.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Whisling Rocket", price: 430.00, per: "1 Box", image: "images/ground chakkar.webp" },
+	  ],
+
+	  "Twinkling Star & Pencil": [
+		{ name: "1½\" Twinkling Star", price: 50.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "4\" Twinkling Star", price: 145.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Rangan Rasi (colour Satti)", price: 215.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Mercury Candle", price: 145.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "7\" Pencil", price: 50.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "10\" Pencil", price: 130.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Electric Stone", price: 25.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Magic Pops", price: 25.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Kit Kat", price: 60.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Toys Cartton", price: 35.00, per: "1 Box", image: "images/ground chakkar.webp" },
+	  ],
+
+	  "Colour Fountains": [
+		{ name: "Tesco Grizz Colour Fountain", price: 170.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Magic Pambaram (10 Pcs)", price: 265.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Star King", price: 310.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Darling Dance Butterfly (10 Pcs)", price: 195.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Siren (3 Pcs)", price: 410.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Pogo (5 Pcs)", price: 385.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Disco Shower (5 Pcs)", price: 240.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Colour Rain (5 Pcs)", price: 240.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Sky Bloom (Penda) (5 Pcs)", price: 385.00, per: "1 Box", image: "images/ground chakkar.webp" },
+		{ name: "Magic Show (2 Pcs)", price: 600.00, per: "1 Box", image: "images/ground chakkar.webp" },
+	  ],
+	"Fancy Items - Four Colour": [
+		{ name: 'Chotta Fancy', price: 95.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '1¾" Three in One (3 Pcs)', price: 575.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '2" Fancy', price: 290.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '2½" Cyclone Fancy 3 Stop', price: 480.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '3½" Silver Fancy', price: 625.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '3½" Double Ball Double Action', price: 960.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '4" Multi Colour Fancy', price: 720.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '4" Mega Aerial Tower (2 Pcs)', price: 1320.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '5½" Mega Super Fancy', price: 1560.00, per: '1 Box', image: "images/ground chakkar.webp" },
+	  ],
+	  "Fancy New Items": [
+		{ name: 'Photo Flash (5 Pcs)', price: 195.00, per: '1 Pce', image: "images/ground chakkar.webp" },
+		{ name: 'Star Light & Sun Light (5 Pcs)', price: 240.00, per: '1 Pce', image: "images/ground chakkar.webp" },
+		{ name: 'Rainbow Colour Smoke (3 Pcs)', price: 385.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Teen Beer', price: 310.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Jelly Bean Candle (3 Pcs)', price: 215.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Peacock', price: 410.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Tri Colour (5 Pcs)', price: 575.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Pawpatrol & Spiderman', price: 335.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Heli Copter (5 Pcs)', price: 265.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Badapeafowl', price: 1080.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Asarafi Colour Fountion (2 Pcs)', price: 600.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Rainbow Colour Fountion', price: 605.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Sona Myur Anar (2 Pcs)', price: 480.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Five Rangers (Five Colour)', price: 745.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Water Queen', price: 455.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Rainy Shiny', price: 575.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Old is Gold (90’s Kids)', price: 480.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'T20 Twenty Crackling Fashion', price: 360.00, per: '1 Box', image: "images/ground chakkar.webp" },
+	  ],
+	  "Fancy Shot Items": [
+		{ name: '7 Shot Colour (5 Pcs)', price: 215.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '12 Shot Ball Colour Rider', price: 385.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '12 Shot Multi Colour', price: 530.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '30 Shot Treat Multi Colour', price: 1020.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '60 Shot Jamaican Multi Colour', price: 2040.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '120 Shot Star Show Multi Colour', price: 4080.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Special Winner', price: 9600.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '240 Shot Multi Colour', price: 8160.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '504 Shot Multi Colour', price: 16800.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Bharat Rathna (2½’ Comet)', price: 9600.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '30 Shot Univercell (2½’ Comet)', price: 12000.00, per: '1 Box', image: "images/ground chakkar.webp" },
+	  ],
+	"Sparklers": [
+		{ name: '7 Cm Electric (10 Pcs)', price: 20.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '7 Cm Colour (10 Pcs)', price: 30.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '7 Cm Green (10 Pcs)', price: 30.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '7 Cm Red (10 Pcs)', price: 30.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '10 Cm Electric (10 Pcs)', price: 45.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '10 Cm Colour (10 Pcs)', price: 50.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '10 Cm Green (10 Pcs)', price: 55.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '10 Cm Red (10 Pcs)', price: 60.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '12 Cm Electric (10 Pcs)', price: 65.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '12 Cm Colour (10 Pcs)', price: 75.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '12 Cm Green (10 Pcs)', price: 75.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '12 Cm Red (10 Pcs)', price: 85.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '15 Cm Electric (10 Pcs)', price: 95.00, per: '1 Box' , image: "images/ground chakkar.webp"},
+		{ name: '15 Cm Colour (10 Pcs)', price: 100.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '15 Cm Green (10 Pcs)', price: 110.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '15 Cm Red (10 Pcs)', price: 115.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '30 Cm Electric (5 Pcs)', price: 95.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '30 Cm Colour (5 Pcs)', price: 100.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '30 Cm Green (5 Pcs)', price: 110.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '30 Cm Red (5 Pcs)', price: 115.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '50 Cm Electric (5 Pcs)', price: 435.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '50 Cm Colour (5 Pcs)', price: 480.00, per: '1 Box', image: "images/ground chakkar.webp" }
+	  ],
+	  "Colour Matches": [
+		{ name: 'Sadha Matches Red & Green', price: 30.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Mini Deluxe', price: 120.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Matrix', price: 195.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Blooms', price: 335.00, per: '1 Box', image: "images/ground chakkar.webp"},
+		{ name: '10 in 1 Mega Lap Top', price: 600.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Roll Cap', price: 145.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Serpent Eggs Big', price: 50.00, per: '1 Doz', image: "images/ground chakkar.webp" },
+		{ name: 'Anakonda', price: 215.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: 'Angry Bird', price: 25.00, per: '1 Box', image: "images/ground chakkar.webp" }
+	  ],
+	  "Festivel Items": [
+		{ name: '1000 Wala', price: 385.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '2000 Wala', price: 770.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '5000 Wala', price: 1920.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '10000 Wala', price: 3840.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '12 Shot Rider', price: 240.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '25 Shot Rider', price: 505.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '50 Shot Rider', price: 1010.00, per: '1 Box', image: "images/ground chakkar.webp" },
+		{ name: '100 Shot Rider', price: 1970.00, per: '1 Box', image: "images/ground chakkar.webp" }
+	  ]
+  };
+
+  // Flatten data with categories
+  const itemData = [];
+  Object.entries(categorizedItems).forEach(([category, items]) => {
+    items.forEach(item => {
+      item.category = category;
+      item.quantity = 0;
+      if (!item.image) item.image = "images/ground chakkar.webp"; // Default image
+      itemData.push(item);
+    });
+  });
+
+  function renderTable() {
+    const tbody = document.querySelector("#itemTable tbody");
+    tbody.innerHTML = "";
+
+    let currentCategory = "";
+    let serial = 1;
+
+    itemData.forEach((item, index) => {
+      if (item.category !== currentCategory) {
+        currentCategory = item.category;
+        const catRow = document.createElement("tr");
+        catRow.innerHTML = `
+          <td colspan="8" style="background:#333; font-weight:bold; text-align:center; padding: 10px;">
+            ${currentCategory}
+          </td>`;
+        tbody.appendChild(catRow);
+      }
+
+      const discounted = item.price * 0.2;
+      const subtotal = discounted * item.quantity;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${serial++}</td>
+        <td><img src="${item.image}" alt="${item.name}"/></td>
+        <td>${item.name}</td>
+        <td>₹${Math.round(item.price)}</td>
+        <td>${item.per}</td>
+        <td>₹${Math.round(discounted)}</td>
+        <td>
+          <button onclick="changeQty(${index}, -1)">−</button>
+          <span id="qty-${index}">${item.quantity}</span>
+          <button onclick="changeQty(${index}, 1)">+</button>
+        </td>
+        <td id="subtotal-${index}">₹${subtotal.toFixed(2)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    updateTotal();
+  }
+
+  function changeQty(index, delta) {
+    itemData[index].quantity = Math.max(0, itemData[index].quantity + delta);
+    const discounted = itemData[index].price * 0.2;
+    const newSubtotal = discounted * itemData[index].quantity;
+
+    document.getElementById(`qty-${index}`).innerText = itemData[index].quantity;
+    document.getElementById(`subtotal-${index}`).innerText = `₹${newSubtotal.toFixed(2)}`;
+
+    updateTotal();
+  }
+
+  function updateTotal() {
+    let total = 0;
+    itemData.forEach(item => {
+      total += item.price * 0.2 * item.quantity;
+    });
+    document.getElementById("total").innerText = total.toFixed(2);
+  }
+
+  async function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const head = [["S.No", "Item", "Price", "Per", "Discounted Price", "Quantity", "Subtotal"]];
+    const body = [];
+
+    let total = 0;
+    let serial = 1;
+    let currentCategory = "";
+
+    itemData.forEach(item => {
+      if (item.quantity > 0) {
+        const discounted = item.price * 0.2;
         const subtotal = discounted * item.quantity;
+        total += subtotal;
 
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><img src="${item.image}" alt="${item.name}"/></td>
-          <td>${item.name}</td>
-          <td>₹${item.price.toFixed(2)}</td>
-          <td>${item.per}</td>
-          <td>₹${discounted.toFixed(2)}</td>
-          <td>
-            <button onclick="changeQty(${index}, -1)">−</button>
-            <span id="qty-${index}">${item.quantity}</span>
-            <button onclick="changeQty(${index}, 1)">+</button>
-          </td>
-          <td id="subtotal-${index}">₹${subtotal.toFixed(2)}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      updateTotal();
-    }
-
-    function changeQty(index, delta) {
-      itemData[index].quantity = Math.max(0, itemData[index].quantity + delta);
-      const discounted = itemData[index].price * 0.8;
-      const newSubtotal = discounted * itemData[index].quantity;
-
-      document.getElementById(`qty-${index}`).innerText = itemData[index].quantity;
-      document.getElementById(`subtotal-${index}`).innerText = `₹${newSubtotal.toFixed(2)}`;
-
-      updateTotal();
-    }
-
-    function updateTotal() {
-      let total = 0;
-      itemData.forEach(item => {
-        total += item.price * 0.8 * item.quantity;
-      });
-      document.getElementById("total").innerText = total.toFixed(2);
-    }
-
-    async function generatePDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      const head = [["Item", "Price", "Per", "Discounted Price", "Quantity", "Subtotal"]];
-      const body = [];
-
-      let total = 0;
-
-      itemData.forEach(item => {
-        if (item.quantity > 0) {
-          const discounted = item.price * 0.8;
-          const subtotal = discounted * item.quantity;
-          total += subtotal;
-
-          body.push([
-            String(item.name),
-            `Rs. ${item.price.toFixed(2)}`,
-            String(item.per),
-            `Rs. ${discounted.toFixed(2)}`,
-            String(item.quantity),
-            `Rs. ${subtotal.toFixed(2)}`
-          ]);
+        if (item.category !== currentCategory) {
+          currentCategory = item.category;
+          body.push([{ content: currentCategory, colSpan: 7, styles: { fillColor: [200, 200, 200], fontStyle: 'bold' } }]);
         }
-      });
 
-      doc.setFontSize(16);
-      doc.text("Crackers Order Summary", 14, 20);
+        body.push([
+          String(serial++),
+          item.name,
+          `Rs ${Math.round(item.price)}`,
+          item.per,
+          `Rs ${Math.round(discounted)}`,
+          String(item.quantity),
+          `Rs ${Math.round(subtotal)}`
+        ]);
+      }
+    });
 
-      doc.autoTable({
-        head: head,
-        body: body,
-        startY: 30,
-        styles: { fontSize: 11, cellPadding: 3 },
-        theme: 'grid',
-        headStyles: { fillColor: [41, 128, 185], textColor: 255 },
-        bodyStyles: { textColor: 20 },
-      });
+    doc.setFontSize(16);
+    doc.text("Crackers Order Summary", 14, 20);
 
-      const finalY = doc.lastAutoTable.finalY || 30;
-      doc.setFontSize(13);
-      doc.text(`Total: Rs.${total.toFixed(2)}`, 14, finalY + 10);
+    doc.autoTable({
+      head: head,
+      body: body,
+      startY: 30,
+      styles: { fontSize: 11, cellPadding: 3 },
+      theme: 'grid',
+      headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+    });
 
-      doc.save("cracker-order-summary.pdf");
-    }
+    const finalY = doc.lastAutoTable.finalY || 30;
+    doc.setFontSize(13);
+    doc.text(`Total: Rs ${Math.round(total)}`, 14, finalY + 10);
 
-    renderTable();
-  </script>
+    doc.save("cracker-order-summary.pdf");
+  }
+
+  renderTable();
+</script>
 
 </body>
 </html>
